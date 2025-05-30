@@ -3,27 +3,25 @@ const express = require('express');
 const router = express.Router();
 const Note = require('../models/Note');
 
-
-const authMiddleware = (req, res, next) => {
-  req.user = { id: '123', name: 'Test User' };
+// Middleware to simulate user auth
+router.use((req, res, next) => {
+  req.user = { id: 'simulated-user-id' };
   next();
-};
+});
 
-router.use(authMiddleware);
-
-
+// Create a new note
 router.post('/', async (req, res) => {
   try {
     const { content, author } = req.body;
     const note = new Note({ content, author });
-    await note.save();
-    res.status(201).json({ message: 'Note created successfully', note });
+    const savedNote = await note.save();
+    res.status(201).json(savedNote);
   } catch (error) {
     res.status(400).json({ message: `Error creating note: ${error.message}` });
   }
 });
 
-
+// Get all notes (with pagination)
 router.get('/', async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -48,45 +46,46 @@ router.get('/', async (req, res) => {
   }
 });
 
-
+// Like a note
 router.patch('/:id/like', async (req, res) => {
   try {
     const note = await Note.findById(req.params.id);
     if (!note) {
       return res.status(404).json({ message: 'Note not found' });
     }
-    note.likes = (note.likes ?? 0) + 1;
-    await note.save();
-    res.json({ message: 'Note liked successfully', note });
+    note.likes = (note?.likes ?? 0) + 1;
+    const updatedNote = await note.save();
+    res.json(updatedNote);
   } catch (error) {
-    res.status(500).json({ message: `Error liking note: ${error.message}` });
+    res.status(400).json({ message: `Error liking note: ${error.message}` });
   }
 });
 
+// Unlike a note
 router.patch('/:id/unlike', async (req, res) => {
   try {
     const note = await Note.findById(req.params.id);
     if (!note) {
       return res.status(404).json({ message: 'Note not found' });
     }
-    note.likes = Math.max((note.likes ?? 0) - 1, 0);
-    await note.save();
-    res.json({ message: 'Note unliked successfully', note });
+    note.likes = Math.max((note?.likes ?? 0) - 1, 0);
+    const updatedNote = await note.save();
+    res.json(updatedNote);
   } catch (error) {
-    res.status(500).json({ message: `Error unliking note: ${error.message}` });
+    res.status(400).json({ message: `Error unliking note: ${error.message}` });
   }
 });
 
-
+// Delete a note
 router.delete('/:id', async (req, res) => {
   try {
     const note = await Note.findByIdAndDelete(req.params.id);
     if (!note) {
       return res.status(404).json({ message: 'Note not found' });
     }
-    res.json({ message: 'Note deleted successfully'});
+    res.json({ message: `Note deleted successfully` });
   } catch (error) {
-    res.status(500).json({ message: `Error deleting note: ${error.message}` });
+    res.status(400).json({ message: `Error deleting note: ${error.message}` });
   }
 });
 
