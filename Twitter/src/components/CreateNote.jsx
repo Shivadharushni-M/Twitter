@@ -1,3 +1,4 @@
+//src/components/CreateNote.jsx
 import { useState } from 'react';
 
 const CreateNote = ({ onNoteCreated }) => {
@@ -38,13 +39,32 @@ const CreateNote = ({ onNoteCreated }) => {
   };
 
   return (
-    <div>
-      <h2>
+    <div style={{
+      backgroundColor: '#f8f9fa',
+      padding: '20px',
+      borderRadius: '8px',
+      marginBottom: '20px',
+      border: '1px solid #e9ecef',
+      width: '100%',
+      boxSizing: 'border-box'
+    }}>
+      <h2 style={{
+        color: '#333',
+        marginBottom: '20px',
+        fontSize: '1.5rem',
+        fontWeight: '600',
+        textAlign: 'center'
+      }}>
         Create New Note
       </h2>
       <div>
-        <div >
-          <label>
+        <div style={{ marginBottom: '15px' }}>
+          <label style={{
+            display: 'block',
+            marginBottom: '5px',
+            color: '#555',
+            fontWeight: '500'
+          }}>
             Author
           </label>
           <input
@@ -54,12 +74,24 @@ const CreateNote = ({ onNoteCreated }) => {
             value={newNote.author}
             onChange={handleInputChange}
             placeholder="Your name..."
-
             required
+            style={{
+              width: '100%',
+              padding: '10px',
+              border: '1px solid #ddd',
+              borderRadius: '4px',
+              fontSize: '14px',
+              boxSizing: 'border-box'
+            }}
           />
         </div>
-        <div >
-          <label>
+        <div style={{ marginBottom: '15px' }}>
+          <label style={{
+            display: 'block',
+            marginBottom: '5px',
+            color: '#555',
+            fontWeight: '500'
+          }}>
             Content
           </label>
           <textarea
@@ -69,15 +101,32 @@ const CreateNote = ({ onNoteCreated }) => {
             onChange={handleInputChange}
             placeholder="What's on your mind?"
             rows={3}
-        
             required
+            style={{
+              width: '100%',
+              padding: '10px',
+              border: '1px solid #ddd',
+              borderRadius: '4px',
+              fontSize: '14px',
+              resize: 'vertical',
+              boxSizing: 'border-box'
+            }}
           />
         </div>
-        <div className="text-center">
+        <div style={{ textAlign: 'center' }}>
           <button
             onClick={handleSubmit}
             disabled={submitting}
-      
+            style={{
+              backgroundColor: submitting ? '#6c757d' : '#007bff',
+              color: 'white',
+              padding: '10px 20px',
+              border: 'none',
+              borderRadius: '4px',
+              fontSize: '14px',
+              cursor: submitting ? 'not-allowed' : 'pointer',
+              fontWeight: '500'
+            }}
           >
             {submitting ? 'Posting...' : 'Post Note'}
           </button>
@@ -87,4 +136,4 @@ const CreateNote = ({ onNoteCreated }) => {
   );
 };
 
-export default CreateNote; 
+export default CreateNote;
